@@ -1,0 +1,48 @@
+==Bumble
+
+Bumble is a very small wrapper around DataStore, that allow you to create data models backed by Google’s DataStore. It was developed to back YARBL, so it really only supports the things needed for that application.
+
+This is what the data model for YARBL looks like. This should give you a feeling for how you define models with Bumble. One thing to remember is that the DataStore actually allows any properties/attributes on entitites, so it fits a language like Ruby very well.
+
+  class Person
+    include Bumble
+
+    ds :given_name, :sur_name, :email
+    has_many :blogs, Blog, :owner_id
+  end
+
+  class Blog
+    include Bumble
+
+    ds :name, :owner_id, :created_at
+    belongs_to :owner, Person
+    has_many :posts, :Post, :blog_id, :iorder => :created_at
+  end
+
+  class Post
+    include Bumble
+
+    ds :title, :content, :created_at, :blog_id
+    belongs_to :blog, Blog
+  end
+
+To actually use the model for something, you can do things like these:
+
+  Blog.all
+
+  Post.all({}, :limit => 15, :iorder => :created_at)
+
+  blog = Blog.get(params[:id])
+  posts = blog.posts
+
+  Blog.create :name => name, :owner => @person, :created_at => Time.now
+
+  Post.all.each do |p|
+    p.delete!
+  end
+
+Here are most of the supported methods. The implementation is incredibly small and you really can’t go wrong with it. Of course, it is not tuned at all, so it does lots of fetches it could avoid. I’m happily accepting patches! The code can be found at http://github.com/olabini/bumble.
+
+Taken from "Jruby on Rails on Google App Engine, APRIL 8TH, 2009" at
+http://olabini.com/blog/2009/04/jruby-on-rails-on-google-app-engine
+
