@@ -5,6 +5,8 @@ require 'rubygems/specification'
 require 'date'
 require 'spec/rake/spectask'
 
+require File.dirname(__FILE__) + '/lib/bumble/version'
+
 # set up pretty rdoc if possible
 begin
   gem 'rdoc'
@@ -14,7 +16,7 @@ rescue Exception
 end
 
 GEM = "bumble"
-GEM_VERSION = "0.0.1"
+GEM_VERSION = Bumble::VERSION
 AUTHOR = "Ola Bini"
 EMAIL = "ola.bini@gmail.com"
 HOMEPAGE = "http://github.com/olabini/bumble"
@@ -34,8 +36,8 @@ spec = Gem::Specification.new do |s|
   s.homepage = HOMEPAGE
   s.require_path = 'lib'
   s.autorequire = GEM
-  s.files = %w(LICENSE README.rdoc Rakefile) + Dir.glob("spec/**/*") + 
-            %w(lib/bumble.rb lib/bumble/bumble.rb)
+  s.files = %w(LICENSE README.rdoc Rakefile) +
+      Dir.glob("spec/**/*") + Dir.glob("lib/**/*")
 end
 
 task :default => :spec

@@ -176,7 +176,7 @@ DEF
         q = q.add_sort(options[:iorder].to_s, DS::Query::SortDirection::DESCENDING)
       end
 
-      $servlet_context.log "doing search: #{q.to_s}"
+    # $servlet_context.log "doing search: #{q.to_s}"
       
       iter = if fo
                DS::Service.prepare(q).as_iterable(fo)
